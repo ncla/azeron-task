@@ -28,6 +28,8 @@ class Calendar extends Model
 {
     protected $table = 'calendars';
 
+    protected $fillable = ['title', 'user_id'];
+
     public function year()
     {
         return $this->hasOne('App\Year');

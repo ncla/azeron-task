@@ -28,6 +28,8 @@ class Month extends Model
 {
     protected $table = 'calendar_months';
 
+    protected $fillable = ['month'];
+
     public function calendar()
     {
         return $this->year->calendar();

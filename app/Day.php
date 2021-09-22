@@ -27,6 +27,8 @@ class Day extends Model
 {
     protected $table = 'calendar_days';
 
+    protected $fillable = ['day'];
+
     public function calendar()
     {
         return $this->month->year->calendar();

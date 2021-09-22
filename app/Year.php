@@ -28,6 +28,8 @@ class Year extends Model
 {
     protected $table = 'calendar_years';
 
+    protected $fillable = ['year'];
+
     public function calendar()
     {
         return $this->belongsTo('App\Calendar');
