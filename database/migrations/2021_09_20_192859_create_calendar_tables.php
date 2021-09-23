@@ -25,6 +25,11 @@ class CreateCalendarTables extends Migration
             $table->smallInteger('year');
             $table->unsignedBigInteger('calendar_id');
             $table->timestamps();
+
+            $table->foreign('calendar_id')
+                ->references('id')
+                ->on('calendars')
+                ->onDelete('cascade');
         });
 
         Schema::create('calendar_months', function (Blueprint $table) {
@@ -32,6 +37,11 @@ class CreateCalendarTables extends Migration
             $table->smallInteger('month');
             $table->unsignedBigInteger('year_id');
             $table->timestamps();
+
+            $table->foreign('year_id')
+                ->references('id')
+                ->on('calendar_years')
+                ->onDelete('cascade');
         });
 
         Schema::create('calendar_days', function (Blueprint $table) {
@@ -39,6 +49,11 @@ class CreateCalendarTables extends Migration
             $table->smallInteger('day');
             $table->unsignedBigInteger('month_id');
             $table->timestamps();
+
+            $table->foreign('month_id')
+                ->references('id')
+                ->on('calendar_months')
+                ->onDelete('cascade');
         });
     }
 

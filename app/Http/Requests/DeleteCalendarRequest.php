@@ -4,10 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddCalendarRequest extends FormRequest
+class DeleteCalendarRequest extends FormRequest
 {
-    use DateCarbonValidator;
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -16,9 +14,7 @@ class AddCalendarRequest extends FormRequest
     public function rules()
     {
         return [
-            'year' => 'required|numeric',
-            'month' => 'required|numeric',
-            'day' => 'required|numeric'
+            'calendar_id' => 'exists:App\Calendar,id',
         ];
     }
 }
