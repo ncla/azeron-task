@@ -63,4 +63,17 @@ class Calendar
     {
         return EloquentCalendar::whereId($calendarId)->delete();
     }
+
+    /**
+     * @param $orderBy
+     * @param $filters
+     * @param \App\Database\CalendarListQueryBuilder $calendarListQueryBuilder
+     * @return \Illuminate\Support\Collection
+     */
+    public function listCalendars($orderBy, $filters)
+    {
+        // TODO: Instead of hard creating object do DI? DI didn't work out as it turned into singleton
+        $queryBuilder = new CalendarListQueryBuilder();
+        return $queryBuilder->get($orderBy, $filters);
+    }
 }

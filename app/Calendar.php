@@ -30,6 +30,8 @@ class Calendar extends Model
 
     protected $fillable = ['title', 'user_id'];
 
+    protected $with = ['year', 'year.month', 'year.month.day'];
+
     public function year()
     {
         return $this->hasOne('App\Year');

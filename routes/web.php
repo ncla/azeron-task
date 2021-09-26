@@ -25,4 +25,6 @@ Route::prefix('calendar')->middleware('auth')->group(function () {
         Route::patch('/edit', 'CalendarController@edit');
         Route::delete('/delete', 'CalendarController@delete');
     });
+
+    Route::post('/list', 'CalendarController@list');
 });

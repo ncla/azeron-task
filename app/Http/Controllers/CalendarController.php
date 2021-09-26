@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddCalendarRequest;
 use App\Http\Requests\DeleteCalendarRequest;
 use App\Http\Requests\EditCalendarRequest;
+use App\Http\Requests\ListCalendarsRequest;
 use Auth;
 use App\Database\Calendar as CalendarRecordManager;
 
@@ -77,5 +78,10 @@ class CalendarController extends Controller
         return response()->json([
             'message' => 'Success',
         ]);
+    }
+
+    public function list(ListCalendarsRequest $request)
+    {
+        return $this->calendarDb->listCalendars($request->get('order_by'), $request->get('filter'));
     }
 }
