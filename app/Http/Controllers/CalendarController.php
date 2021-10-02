@@ -80,6 +80,12 @@ class CalendarController extends Controller
         ]);
     }
 
+    /**
+     * List calendars
+     *
+     * @param ListCalendarsRequest $request
+     * @return \Illuminate\Support\Collection
+     */
     public function list(ListCalendarsRequest $request)
     {
         return $this->calendarDb->listCalendars($request->get('order_by'), $request->get('filter'));

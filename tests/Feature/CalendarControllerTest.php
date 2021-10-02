@@ -469,4 +469,98 @@ class CalendarControllerTest extends TestCase
             ->assertJsonFragment(['day' => '17', 'month' => '9', 'year' => '1994'])
             ->assertJsonFragment(['day' => '17', 'month' => '9', 'year' => '1995']);
     }
+
+    public function testOrderingByDisallowedFieldGivesValidationErrorMessage()
+    {
+        $user = factory(User::class)->create([
+            'is_admin' => 0
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->postJson('/calendar/list', [
+                'order_by' => [
+                    'created_at' => 'asc',
+                    'year' => 'desc'
+                ]
+            ]);
+
+        $response->assertSee('contains disallowed field ids.');
+    }
+
+    public function testInvalidOrderingDirectionNameGivesValidationErrorMessage()
+    {
+        $user = factory(User::class)->create([
+            'is_admin' => 0
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->postJson('/calendar/list', [
+                'order_by' => [
+                    'year' => 'descending'
+                ]
+            ]);
+
+        $response->assertSee('The selected order_by.year is invalid.');
+    }
+
+    public function testInvalidFilterOperatorGivesValidationErrorMessage()
+    {
+        $user = factory(User::class)->create([
+            'is_admin' => 0
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->postJson('/calendar/list', [
+                'filter' => [
+                    'not_in' => [
+                        'year' => [1994, 1995],
+                    ],
+                ],
+            ]);
+
+        $response->assertSee('filter contains disallowed operator.');
+    }
+
+    public function testInvalidFilterFieldGivesValidationErrorMessage()
+    {
+        $user = factory(User::class)->create([
+            'is_admin' => 0
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->postJson('/calendar/list', [
+                'filter' => [
+                    'in' => [
+                        'created_at' => ['2021-09-22 18:43:08'],
+                    ],
+                ],
+            ]);
+
+        $response->assertSee('filter.in contains disallowed field ids.');
+    }
+
+    public function testGivingNonNumericValuesToFilterGivesValidationErrorMessage()
+    {
+        $user = factory(User::class)->create([
+            'is_admin' => 0
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->postJson('/calendar/list', [
+                'filter' => [
+                    'in' => [
+                        'year' => ['two thousand twenty one'],
+                        'month' => 'april'
+                    ],
+                ],
+            ]);
+
+        $response->assertSee('The filter.in.year.0 must be a number.');
+        $response->assertSee('filter.in.month must be a number or array.');
+    }
 }
