@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AddCalendarRequest extends FormRequest
 {
-    use DateCarbonValidator;
+    use DateCarbonValidator, IsAdminAuthorize;
 
     /**
      * Get the validation rules that apply to the request.

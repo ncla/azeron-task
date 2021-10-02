@@ -20,11 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('calendar')->middleware('auth')->group(function () {
-    Route::middleware('auth.admin')->group(function () {
-        Route::put('/add', 'CalendarController@add');
-        Route::patch('/edit', 'CalendarController@edit');
-        Route::delete('/delete', 'CalendarController@delete');
-    });
-
+    Route::put('/add', 'CalendarController@add');
+    Route::patch('/edit', 'CalendarController@edit');
+    Route::delete('/delete', 'CalendarController@delete');
     Route::post('/list', 'CalendarController@list');
 });
