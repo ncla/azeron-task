@@ -1,64 +1,31 @@
-# Requirements
-  * PHP 7.2
-  * mysql or maria db
-  * laravel ^6.0
+# Installation
 
+Standard Laravel installation.
 
-# TASK
+1. Pull the project with sub-modules included (for Docker to be included): `git clone git@github.com:ncla/laradock-azeron.git --recurse-submodules`
+2. Copy .env.example in project root to .env: `cp .env.example .env`
+3. If you plan to use browser to make requests to API, compile front-end: `yarn && yarn run prod`
 
-## Create Crud endpoints, for CalendarController (add, edit, delete, list)
+## Docker setup
 
-## Basic Structure
-### app/Models (month, day, year, calendar)
-#### app/Model relations:
-    - calendar: (calendar->year)
-    - year: (calendar<-year->month)
-    - month: (year<-month->day)
-    - day: (month<-day)
+1. Navigate to `docker` directory `cd docker`
+2. Copy Docker .env file: `cp .env.example .env`
+3. `docker-compose up -d nginx mysql`
+4. Access Docker: `docker-compose exec --user=laradock workspace bash`
+5. `composer install`, `php artisan key:generate`, `php artisan migrate`
 
-### tests/Feature/calendarTest.php (add, edit, delete, list)
-    - autorization() // this will check if autorization works correctly
-    - add()
-    - edit()
-    - delete()
-    - list()
+# Usage
 
-### CalendarController should contain crud endpoints
-    - add() CustomRequest needs to Receive year, day month fields who all are validated.
-    - edit() CustomRequest needs to Receive year, day month and calendar record ID who all are validated
-    - delete() CustomRequest needs to Receive Calendar record ID
-    - list() CustomRequest needs to Receive and be validated
-        - filter :
-            -order_by
-                 * this can only accept ASC or DESC
-                 default: order by Year Month Day DESC 
-                 custom: order by any field or fields in DB (month, day, year, calendar) and ignore all others
-            -in
-                 * there can be not in but in, and, or fields
-                 default: none
-                 custom: in should accept any field or fields in DB (month, day, year, calendar) and ignore all others
+You can register to create a user. To set user to an admin you'll have to connect to database, the default MYSQL credentials in .env.example should work. Edit `is_admin` column to `1` in `users` table.
 
-    * All data given in endpoints listed should be in raw json format
-    * All endpoints should use CustomRequests (app/Http/Requests) and validate incoming data, check for authorize 
-    * Endpoints add, edit, delete should allow only user with role admin to be able to use them
-    * Endpoints list should allow only user with role admin, user to be able to use them
-      
+To run tests, simply run `phpunit` within Docker container project directory.
 
-### List endpoint raw json input.
+To fire requests to the API, be logged in from `/home` and open browser developer tools console and create requests manually with these lines as examples:
+```js
+await window.axios.put('/calendar/add', {year: 2020, month: 8, day: 17});
+await window.axios.patch('/calendar/edit', {calendar_id: 1, year: 2020, month: 8, day: 18});
+await window.axios.delete('/calendar/delete', {data: {calendar_id: 1}});
+await window.axios.post('/calendar/list', {
+    order_by: {year: 'asc', month: 'desc'},
+}).then((r) => console.log(r.data));
 ```
-{
-  "order_by": {
-      "user_id": "DESC/ASC"
-  },
-  "filter": {
-      "in" :{
-        "id": 1
-      }
-  }
-}
-```
-
-### Bonus points for
-    - Creating documentation with Swagger API and publishing it under (api/documentation)
-    - Creating git repository and pushing it onto web
-    - Dockeraizing this project
