@@ -16,7 +16,7 @@ class DeleteCalendarRequest extends FormRequest
     public function rules()
     {
         return [
-            'calendar_id' => 'exists:App\Calendar,id',
+            'calendar_id' => 'required|numeric|exists:App\Calendar,id',
         ];
     }
 }
