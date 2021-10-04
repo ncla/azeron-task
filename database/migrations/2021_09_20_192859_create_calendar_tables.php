@@ -8,7 +8,7 @@ class CreateCalendarTables extends Migration
 {
     /**
      * Run the migrations.
-     *
+     * TODO: Will need indexes once the tables get bigger
      * @return void
      */
     public function up()

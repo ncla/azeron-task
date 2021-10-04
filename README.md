@@ -2,7 +2,7 @@
 
 Standard Laravel installation.
 
-1. Pull the project with sub-modules included (for Docker to be included): `git clone git@github.com:ncla/laradock-azeron.git --recurse-submodules`
+1. Pull the project with sub-modules included (for Docker to be included): `git clone https://github.com/ncla/azeron-task.git --recurse-submodules`
 2. Copy .env.example in project root to .env: `cp .env.example .env`
 3. If you plan to use browser to make requests to API, compile front-end: `yarn && yarn run prod`
 

@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ListCalendarsRequest extends FormRequest
 {
+    /**
+     * @var array
+     */
     const ALLOWED_FIELDS = [
         'year',
         'month',
@@ -13,6 +16,9 @@ class ListCalendarsRequest extends FormRequest
         'calendar_id'
     ];
 
+    /**
+     * @var array
+     */
     const ALLOWED_FILTER_OPERATORS = [
         'in',
         'or',

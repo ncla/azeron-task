@@ -3,8 +3,16 @@
 namespace App\Database;
 
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class CalendarListQueryBuilder
+ *
+ * Query builder for listing calendars depending on filter and order options
+ *
+ * @package App\Database
+ */
 class CalendarListQueryBuilder
 {
     /**
@@ -12,18 +20,31 @@ class CalendarListQueryBuilder
      */
     protected $query;
 
+    /**
+     * @var array
+     */
     const OPERATOR_TO_BUILDER_METHOD = [
         'and' => 'where',
         'or' => 'orWhere',
         'in' => 'whereIn'
     ];
 
+    /**
+     * CalendarListQueryBuilder constructor.
+     *
+     * @return $this
+     */
     public function __construct()
     {
         $this->query = DB::table('calendars');
+
+        return $this;
     }
 
-    protected function applyBase()
+    /**
+     * @return $this
+     */
+    protected function applyBase(): self
     {
         $this->query = $this->query
             ->select(['calendars.id AS calendar_id', 'calendars.title', 'calendar_years.year', 'calendar_months.month', 'calendar_days.day'])
@@ -34,7 +55,11 @@ class CalendarListQueryBuilder
         return $this;
     }
 
-    protected function applyFilters(array $filters)
+    /**
+     * @param array $filters
+     * @return $this
+     */
+    protected function applyFilters(array $filters): self
     {
         foreach ($filters as $filterOperator => $filterFieldValue) {
             $builderMethodName = $this->getFilterBuilderMethodNameFromOperator($filterOperator);
@@ -56,12 +81,19 @@ class CalendarListQueryBuilder
         return $this;
     }
 
-    protected function getFilterBuilderMethodNameFromOperator(string $operator)
+    /**
+     * @param string $operator
+     * @return string
+     */
+    protected function getFilterBuilderMethodNameFromOperator(string $operator): string
     {
         return self::OPERATOR_TO_BUILDER_METHOD[$operator];
     }
 
-    protected function applyDefaultOrdering()
+    /**
+     * @return $this
+     */
+    protected function applyDefaultOrdering(): self
     {
         $this->query = $this->query
             ->orderBy('year', 'desc')
@@ -71,7 +103,11 @@ class CalendarListQueryBuilder
         return $this;
     }
 
-    protected function applyOrdering(array $orderBy)
+    /**
+     * @param array $orderBy
+     * @return $this
+     */
+    protected function applyOrdering(array $orderBy): self
     {
         foreach ($orderBy as $column => $direction) {
             $this->query = $this->query->orderBy($column, $direction);
@@ -81,11 +117,13 @@ class CalendarListQueryBuilder
     }
 
     /**
+     * TODO: Could move $orderBy and $filters to separate objects/class instead of generic array
+     *
      * @param $orderBy null|array
      * @param $filters null|array
      * @return \Illuminate\Support\Collection
      */
-    public function get($orderBy, $filters)
+    public function get($orderBy, $filters): Collection
     {
         $this->applyBase();
 

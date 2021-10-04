@@ -26,20 +26,39 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Year extends Model
 {
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
     protected $table = 'calendar_years';
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = ['year'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function calendar()
     {
         return $this->belongsTo('App\Calendar');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function month()
     {
         return $this->hasOne('App\Month');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function day()
     {
         return $this->month->day();
